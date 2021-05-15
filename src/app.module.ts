@@ -12,7 +12,7 @@ import { AppService } from './app.service';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
-    }
+    },
   ],
 })
-export class AppModule { }
+export class AppModule {}
