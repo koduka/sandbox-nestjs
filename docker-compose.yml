@@ -6,11 +6,31 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - '.:/app'
-    working_dir: '/app'
+      - .:/app
+    working_dir: /app
     command: 'npm run start:dev'
+    restart: unless-stopped
+    depends_on:
+      - db
     networks:
       default:
+  db:
+    image: postgres:13.3
+    ports:
+      - '5432:5432'
+    environment:
+      TZ: ${TZ}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/postgres/data
+    networks:
+      default:
+
+volumes:
+  db:
 
 networks:
   default:
