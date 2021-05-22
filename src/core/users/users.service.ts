@@ -23,8 +23,14 @@ export class UsersService {
     return repositry.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findById(id: string) {
+    const repositry: Repository<User> = getRepository(User);
+    return repositry.findOne(id);
+  }
+
+  findByEmail(email: string) {
+    const repositry: Repository<User> = getRepository(User);
+    return repositry.findOne({ where: { email } });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
