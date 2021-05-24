@@ -8,7 +8,6 @@ import { AppService } from './app.service';
 import databaseConfig from './core/config/database.config';
 import { UsersModule } from './core/users/users.module';
 import { AuthModule } from './core/auth/auth.module';
-import { LocalStrategy } from './core/auth/local.strategy';
 
 @Module({
   imports: [
@@ -26,7 +25,6 @@ import { LocalStrategy } from './core/auth/local.strategy';
   controllers: [AppController],
   providers: [
     AppService,
-    LocalStrategy,
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
