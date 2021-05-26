@@ -1,13 +1,14 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import databaseConfig from './core/config/database.config';
 import { UsersModule } from './core/users/users.module';
 import { AuthModule } from './core/auth/auth.module';
+import { JwtAuthGuard } from './core/auth/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -29,6 +30,14 @@ import { AuthModule } from './core/auth/auth.module';
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    }
   ],
 })
 export class AppModule {}
