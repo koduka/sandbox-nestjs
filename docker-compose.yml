@@ -4,7 +4,7 @@ services:
   node:
     image: node:14.7
     ports:
-      - '3000:3000'
+      - '3000:${APP_PORT}'
     volumes:
       - .:/app
     working_dir: /app
@@ -17,7 +17,7 @@ services:
   db:
     image: postgres:13.3
     ports:
-      - '5432:5432'
+      - '${POSTGRES_PORT}:5432'
     environment:
       TZ: ${TZ}
       POSTGRES_DB: ${POSTGRES_DB}
@@ -28,9 +28,18 @@ services:
       - db:/var/lib/postgres/data
     networks:
       default:
+  redis:
+    image: redis:6.2.3
+    ports:
+      - '${REDIS_PORT}:6379'
+    volumes:
+      - redis:/data
+    networks: 
+      default:
 
 volumes:
   db:
+  redis:
 
 networks:
   default:
