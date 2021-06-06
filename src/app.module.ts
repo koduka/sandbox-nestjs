@@ -13,6 +13,8 @@ import databaseConfig from './core/config/database.config';
 import { UsersModule } from './core/users/users.module';
 import { AuthModule } from './core/auth/auth.module';
 import { JwtAuthGuard } from './core/auth/jwt-auth.guard';
+import { AwsModule } from './core/aws/aws.module';
+import { JobsModule } from './core/jobs/jobs.module';
 import cacheConfig from './core/config/cache.config';
 
 @Module({
@@ -32,6 +34,8 @@ import cacheConfig from './core/config/cache.config';
     }),
     UsersModule,
     AuthModule,
+    AwsModule,
+    JobsModule,
   ],
   controllers: [AppController],
   providers: [

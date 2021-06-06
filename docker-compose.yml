@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  node:
+  api:
     image: node:14.7
     ports:
-      - '3000:${APP_PORT}'
+      - '${APP_PORT}:${APP_PORT}'
     volumes:
       - .:/app
     working_dir: /app
@@ -12,6 +12,20 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+      - redis
+      - localstack
+    networks:
+      default:
+  worker:
+    image: node:14.7
+    volumes:
+      - .:/app
+    working_dir: /app
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+      - localstack
     networks:
       default:
   db:
@@ -32,8 +46,44 @@ services:
     image: redis:6.2.3
     ports:
       - '${REDIS_PORT}:6379'
+    restart: unless-stopped
     volumes:
       - redis:/data
+    networks: 
+      default:
+  localstack:
+    image: localstack/localstack:0.12.11
+    ports:
+      - '4566:4566'
+    environment:
+      SERVICES: 's3,sqs'
+      HOSTNAME: ${AWS_HOST}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      DEBUG: 1
+    restart: unless-stopped
+    networks: 
+      default:
+  aws-cli:
+    image: amazon/aws-cli:2.2.9
+    entrypoint: aws --endpoint-url=${AWS_ENDPOINT}
+    environment:
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    networks: 
+      default:
+  terraform:
+    build:
+      context: ./docker/terraform/
+    command: bash -c "terraform init && terraform apply --auto-approve"
+    volumes:
+      - ./terraform/sqs.tf:/terraform/sqs.tf
+      - ./terraform/variables.tf:/terraform/variables.tf
+    tty: true
+    depends_on:
+      - localstack
     networks: 
       default:
 
