@@ -4,8 +4,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BaseEntity as TypeOrmBaseEntity } from 'typeorm';
 
-export class BaseEntity {
+export class BaseEntity extends TypeOrmBaseEntity {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 

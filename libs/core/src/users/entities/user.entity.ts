@@ -1,5 +1,5 @@
+import { BaseEntity } from '../../base.entity';
 import { Exclude } from 'class-transformer';
-import { BaseEntity } from 'src/core/base.entity';
 import { Column, Entity } from 'typeorm';
 
 const ROLE_ADMIN = 'admin';

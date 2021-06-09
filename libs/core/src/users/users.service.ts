@@ -1,17 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { getRepository, Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  async create(createUserDto: CreateUserDto) {
+  async create(name: string, email: string, role: string, password: string) {
     const user: User = new User();
-    user.name = createUserDto.name;
-    user.email = createUserDto.email;
-    user.role = createUserDto.role;
-    user.password = createUserDto.password;
+    user.name = name;
+    user.email = email;
+    user.role = role;
+    user.password = password;
     const repositry: Repository<User> = getRepository(User);
 
     return await repositry.save(user);
@@ -33,7 +31,7 @@ export class UsersService {
     return repositry.findOne({ where: { email } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: number) {
     return `This action updates a #${id} user`;
   }
 

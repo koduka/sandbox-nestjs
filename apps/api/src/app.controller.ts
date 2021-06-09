@@ -1,6 +1,6 @@
+import { Public } from '@app/core/auth/jwt-auth.guard';
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Public } from './core/auth/jwt-auth.guard';
 
 @Controller()
 export class AppController {

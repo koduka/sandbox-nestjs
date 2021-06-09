@@ -1,6 +1,6 @@
+import { Public } from '@app/core/auth/jwt-auth.guard';
+import { EXAMPLE_JOB, JobsService } from '@app/core/jobs/jobs.service';
 import { Controller, Get, Post } from '@nestjs/common';
-import { Public } from '../auth/jwt-auth.guard';
-import { EXAMPLE_JOB, JobsService } from './jobs.service';
 
 @Controller('jobs')
 export class JobsController {
