@@ -21,6 +21,7 @@ services:
     volumes:
       - .:/app
     working_dir: /app
+    command: 'npm run start:worker:dev'
     restart: unless-stopped
     depends_on:
       - db
