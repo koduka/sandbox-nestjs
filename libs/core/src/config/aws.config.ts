@@ -6,4 +6,5 @@ export default registerAs('aws', () => ({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   queueName: process.env.AWS_SQS_QUEUE_NAME || 'default-sandbox-nestjs-queue',
+  receiveWaitTimeSeconds: 20,
 }));

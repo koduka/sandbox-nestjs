@@ -8,6 +8,7 @@ import { SqsService } from './sqs.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       load: [awsConfig, cacheConfig],
     }),
   ],

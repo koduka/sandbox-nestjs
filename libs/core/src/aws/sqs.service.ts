@@ -16,6 +16,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class SqsService {
   private sqsClient: SQSClient;
+  private isPollStopped = true;
 
   constructor(private readonly configService: ConfigService) {
     const awsConfig = configService.get('aws');
@@ -46,8 +47,10 @@ export class SqsService {
   }
 
   async receive(handler: (messages: Message[]) => void) {
+    const awsConfig = this.configService.get('aws');
     const params: ReceiveMessageCommandInput = {
       QueueUrl: await this.getQueueUrl(),
+      WaitTimeSeconds: awsConfig.receiveWaitTimeSeconds,
     };
     const command = new ReceiveMessageCommand(params);
     const data = await this.sqsClient.send(command);
@@ -57,6 +60,29 @@ export class SqsService {
       } catch (error) {
         console.error(error);
       }
+    }
+  }
+
+  startPoll(handler: (messages: Message[]) => void) {
+    this.isPollStopped = false;
+    const awsConfig = this.configService.get('aws');
+    this.poll(handler, awsConfig.receiveWaitTimeSeconds);
+  }
+
+  stopPoll() {
+    this.isPollStopped = true;
+  }
+
+  private poll(
+    handler: (messages: Message[]) => void,
+    waitPollTimeSeconds: number,
+  ) {
+    this.receive(handler);
+    if (!this.isPollStopped) {
+      setTimeout(
+        () => this.poll(handler, waitPollTimeSeconds),
+        waitPollTimeSeconds * 1000,
+      );
     }
   }
 

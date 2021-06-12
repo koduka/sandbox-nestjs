@@ -5,5 +5,6 @@ import { AwsModule } from '../aws/aws.module';
 @Module({
   imports: [AwsModule],
   providers: [JobsService],
+  exports: [JobsService],
 })
 export class JobsModule {}

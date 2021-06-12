@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       load: [databaseConfig, cacheConfig],
     }),
     TypeOrmModule.forRootAsync({
@@ -30,6 +31,6 @@ import { UsersModule } from './users/users.module';
     JobsModule,
   ],
   providers: [CoreService],
-  exports: [CoreService],
+  exports: [CoreModule, UsersModule, AuthModule, AwsModule, JobsModule],
 })
 export class CoreModule {}

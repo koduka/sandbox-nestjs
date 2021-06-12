@@ -1,10 +1,10 @@
+import { CoreModule } from '@app/core';
+import { AwsModule } from '@app/core/aws/aws.module';
 import { Module } from '@nestjs/common';
-import { WorkerController } from './worker.controller';
 import { WorkerService } from './worker.service';
 
 @Module({
-  imports: [],
-  controllers: [WorkerController],
-  providers: [WorkerService],
+  imports: [CoreModule, AwsModule],
+  providers: [WorkerService, AwsModule],
 })
 export class WorkerModule {}
